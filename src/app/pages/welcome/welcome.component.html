@@ -1,0 +1,6 @@
+<ul nz-menu  nzMode="horizontal" class="header-menu">
+@for (link of links; track $index) {
+    <li nz-menu-item routerLinkActive="ant-menu-item-selected" [routerLink]="link.path">Welcome</li>
+}
+</ul>
+<router-outlet></router-outlet>

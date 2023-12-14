@@ -1,0 +1,111 @@
+{
+  "$schema": "node_modules/nx/schemas/project-schema.json",
+  "name": "demo-ang17",
+  "projectType": "application",
+  "generators": {
+    "@schematics/angular:component": {
+      "style": "sass"
+    }
+  },
+  "sourceRoot": "src",
+  "prefix": "app",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "options": {
+        "outputPath": "dist/demo-ang17",
+        "index": "src/index.html",
+        "browser": "src/main.ts",
+        "baseHref": "/demo-ang17",
+        "polyfills": [
+          "zone.js"
+        ],
+        "tsConfig": "tsconfig.app.json",
+        "inlineStyleLanguage": "sass",
+        "assets": [
+          "src/favicon.ico",
+          "src/assets",
+          "src/manifest.webmanifest",
+          {
+            "glob": "**/*",
+            "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+            "output": "/assets/"
+          }
+        ],
+        "styles": [
+          "src/styles.sass"
+        ],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all",
+          "serviceWorker": "ngsw-config.json"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "src/environments/environment.ts",
+              "with": "src/environments/environment.development.ts"
+            }
+          ]
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "demo-ang17:build:production"
+        },
+        "development": {
+          "buildTarget": "demo-ang17:build:development",
+          "proxyConfig": "proxy-dev.conf.json"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "demo-ang17:build"
+      }
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "polyfills": [
+          "zone.js",
+          "zone.js/testing"
+        ],
+        "tsConfig": "tsconfig.spec.json",
+        "inlineStyleLanguage": "sass",
+        "assets": [
+          "src/favicon.ico",
+          "src/assets",
+          "src/manifest.webmanifest"
+        ],
+        "styles": [
+          "src/styles.sass"
+        ],
+        "scripts": []
+      }
+    }
+  }
+}

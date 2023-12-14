@@ -1,0 +1,43 @@
+<h4>UI Types</h4>
+@if (uiTypes.length > 0){
+<ul>
+  @for (item of uiTypes ; track item.id) {
+  <li>
+    <b>{{ item.id }}</b
+    >: {{ item.name }}
+  </li>
+  }@empty { No data }
+</ul>
+
+}
+<hr />
+<h4>Object Types</h4>
+<ul>
+  @for (item of objectKeys; track item.id) {
+  <li>
+    <b>{{ item.id }}</b
+    >: {{ item.keyName }} [{{ item.uiTypeId }}]
+  </li>
+  }@empty { No data }
+</ul>
+
+<hr />
+<h4>Sample Form</h4>
+<div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit(model)">
+    <formly-form
+      [form]="form"
+      [fields]="fields"
+      [model]="model"
+    ></formly-form>
+    <button nz-button nzType="primary" type="submit" [disabled]="form.invalid" ><span nz-icon nzType="save"></span>Submit</button>
+  </form>
+  
+</div>
+<hr />
+<h4>Answers( as JSON)</h4>
+@if (form.valid && postObject) {
+  <pre>{{postObject|json}}</pre>
+}@else {  
+  <small class="ant-form-item-required">Please fill required inputs and Submit</small>
+ }

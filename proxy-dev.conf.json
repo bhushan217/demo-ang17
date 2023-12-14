@@ -1,0 +1,9 @@
+{
+    "/api/*": {
+        "pathRewrite": {
+            "^/api": ""
+        },
+        "target": "http://localhost:8087",
+        "logLevel": "verbose"
+    }
+}

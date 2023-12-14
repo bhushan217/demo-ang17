@@ -1,0 +1,38 @@
+$base-bg-color: #1f1f1f
+$logo-width : 10.5rem
+
+
+nz-header 
+  background: $base-bg-color
+  padding: 0
+  display: flex
+  flex: columns
+  .header-logo 
+    width: $logo-width
+    margin: 1rem
+    background: $base-bg-color
+  .header-menu
+    width: calc( 100vw - 2* $logo-width )
+    display: inline-flex
+  .header-logo 
+    width: $logo-width
+
+nz-content 
+  margin: 0 1rem
+
+  nz-slider
+    widows: $logo-width
+
+nz-breadcrumb 
+  margin: 1rem 0
+
+
+.inner-content 
+  padding: 1.5rem
+  background: $base-bg-color
+  min-height: 12.5rem
+
+
+nz-footer 
+  text-align: center
+      
