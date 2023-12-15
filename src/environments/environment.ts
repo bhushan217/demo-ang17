@@ -1,3 +1,4 @@
 export const environment = {
-    apiUrl: 'http://locahost:8080'
+    production: true,
+    apiUrl: 'http://locahost:8087/'
 };

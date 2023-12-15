@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { UiTypeStateService } from '../../store/ui-type/ui-type.state-service';
 import { ObjectKeyStateService } from '../../store/object-key/object-key.state-service';
 import { UiType } from '@app/store/ui-type/ui-type.model';
@@ -20,7 +20,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.sass',
 })
-export class HomePageComponent implements OnInit {
+export class HomePageComponent implements OnInit, OnDestroy {
   @Output() remove = new EventEmitter();
 
   constructor(
@@ -60,9 +60,8 @@ export class HomePageComponent implements OnInit {
           key: field.keyName,
           type: uiType?.name || 'textarea',
           props: { 
-            label: field.keyName,
-            placeholder: 'Default Placeholder',
-            description: 'Default Description',
+            label: field.label,
+            description: field.description,
             required: true
           },
         } as any;
@@ -94,5 +93,10 @@ export class HomePageComponent implements OnInit {
 
       return f;
     });
+  }
+
+  ngOnDestroy(): void {
+      this.fields =[]
+      this.model ={}
   }
 }

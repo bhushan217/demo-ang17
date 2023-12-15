@@ -1,0 +1,10 @@
+services:
+  app:
+    build: .
+    container_name: demo-ang17
+    #"dumb-init", 
+    command: ["npm", "start"]
+    ports:
+      - 4300:4200
+    volumes:
+      - .:/usr/src/app
