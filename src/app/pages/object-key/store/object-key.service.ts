@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { environment } from '@environment/environment';
 import { ObjectKey, ObjectKeyRequiredProps, Page } from './object-key.model';
 import { map } from 'rxjs/operators';
+import { IApiService } from '@app/shared/interfaces/api-interface.service';
+import { Observable } from 'rxjs';
 
 const BASE_URL = `${environment.apiUrl}/api/objectKeys/list`;
 const HEADER = {
@@ -13,13 +15,11 @@ const HEADER = {
   providedIn: 'root',
 })
 export class ObjectKeysService {
-  constructor(private http: HttpClient) {}
-
-  fetchAll() {
-    return this.http.get<Page<ObjectKey>>(BASE_URL).pipe(map(data=> data.content));
+  fetchAll(filters: string[], sorters: string[]) {
+    return this.http.get<Page<ObjectKey>>(BASE_URL).pipe(map((data: Page<ObjectKey>)=> data.content));
   }
 
-  load(id: string) {
+  load(id: number) {
     return this.http.get<ObjectKey>(`${BASE_URL}/${id}`);
   }
 
@@ -47,4 +47,5 @@ export class ObjectKeysService {
   delete(id: number) {
     return this.http.delete(`${BASE_URL}/${id}`);
   }
+  constructor(private http: HttpClient) {}
 }

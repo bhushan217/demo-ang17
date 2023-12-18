@@ -5,10 +5,10 @@ import { createEntityState } from '@state-adapt/core/adapters';
 import { Source, getRequestSources, toSource } from '@state-adapt/rxjs';
 import { concatMap, filter, map } from 'rxjs/operators';
 import { UiType } from './ui-type.model';
-import { State, adapter } from './ui-type.adapter';
+import { State, uiTypeUxadapter } from './ui-type.adapter';
 import { UiTypesPageActions } from './ui-type-page.actions';
-import { UiTypesService } from './ui-type.service';
-
+import { UiTypesApiService } from './ui-type.service';
+export const featureKey = 'uiTypes'
 export const initialState: State = {
   activeUiTypeId: null,
   isLoading: true,
@@ -19,13 +19,13 @@ export const initialState: State = {
 @Injectable({ providedIn: 'root' })
 export class UiTypeStateService {
   store = adapt(initialState, {
-    adapter,
+    adapter: uiTypeUxadapter,
     sources: () => {
-      const uiTypesService = inject(UiTypesService);
+      const uiTypesService = inject(UiTypesApiService);
 
       // https://state-adapt.github.io/docs/rxjs#getrequestsources
       const uiTypesRequestSources = getRequestSources(
-        'uiTypes',
+        featureKey,
         uiTypesService.fetchAll()
       );
 
@@ -63,6 +63,6 @@ export class UiTypeStateService {
         removeUiTypesOne: uiTypeDeleted$,
       };
     },
-    path: 'uiTypes',
+    path: featureKey,
   });
 }

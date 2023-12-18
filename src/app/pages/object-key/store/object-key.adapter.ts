@@ -4,6 +4,7 @@ import {
   EntityState,
   booleanAdapter,
   createEntityAdapter,
+  stringAdapter,
 } from '@state-adapt/core/adapters';
 
 export interface State {
@@ -13,8 +14,18 @@ export interface State {
   objectKeys: EntityState<ObjectKey>; // https://github.com/state-adapt/state-adapt/blob/main/libs/core/adapters/src/lib/create-entity-adapter.function.ts#LL17C1-L23C2
 }
 
-const objectKeyAdapter = joinAdapters<ObjectKey, keyof ObjectKey>()({})(); // https://state-adapt.github.io/docs/core#joinadapters
-const objectKeysAdapter = createEntityAdapter<ObjectKey>()(objectKeyAdapter); // https://state-adapt.github.io/adapters/core#createEntityAdapter
+const objectKeyAdapter = joinAdapters<ObjectKey, keyof ObjectKey>()({
+  keyName: stringAdapter,
+  label: stringAdapter,
+  description: stringAdapter
+})(); // https://state-adapt.github.io/docs/core#joinadapters
+const objectKeysAdapter = createEntityAdapter<ObjectKey>()(objectKeyAdapter,{
+  filters: ['keyName'],
+  sorters: ['label'],
+  // page: 0,
+  // size: 5,
+  // useCache: true
+}); // https://state-adapt.github.io/adapters/core#createEntityAdapter
 
 const errorAdapter = createAdapter<object | null>()({}); // https://state-adapt.github.io/docs/core#createadapter
 // https://state-adapt.github.io/docs/core#createadapter

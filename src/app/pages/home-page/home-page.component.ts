@@ -1,9 +1,9 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { UiTypeStateService } from '../../store/ui-type/ui-type.state-service';
-import { ObjectKeyStateService } from '../../store/object-key/object-key.state-service';
-import { UiType } from '@app/store/ui-type/ui-type.model';
-import { ObjectKey } from '@app/store/object-key/object-key.model';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { UiTypeStateService } from '../ui-type/store/ui-type.state-service';
+import { ObjectKeyStateService } from '../object-key/store/object-key.state-service';
+import { UiType } from '@app/pages/ui-type/store/ui-type.model';
+import { ObjectKey } from '@app/pages/object-key/store/object-key.model';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   FormlyFieldConfig,
   FormlyFormOptions,
@@ -12,31 +12,40 @@ import {
 import { CommonModule } from '@angular/common';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [FormlyModule, CommonModule, ReactiveFormsModule, NzFormModule, NzButtonModule],
+  imports: [FormlyModule, CommonModule, FormsModule, ReactiveFormsModule, NzFormModule, NzButtonModule, NzIconModule, NzTableModule, NzPopconfirmModule],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.sass',
 })
 export class HomePageComponent implements OnInit, OnDestroy {
+
   @Output() remove = new EventEmitter();
 
   constructor(
     private uiTypesRepo: UiTypeStateService,
-    private objectKeysRepo: ObjectKeyStateService
+    private objectKeysRepo: ObjectKeyStateService,
+    private nzMessageService: NzMessageService
   ) {}
 
   uiTypes: UiType[] = [];
-  objectKeys: ObjectKey[] = [];
   postObject:any=null;
+  editCacheUiType: { [key: number]: { edit: boolean; data: UiType } } = {};
 
   form = new FormGroup({});
   options: FormlyFormOptions = {};
   model: any;
   fields: FormlyFieldConfig[] = [];
-  fieldsDuumy: FormlyFieldConfig[] = [
+  fieldsDummy: FormlyFieldConfig[] = [
     {
       key: 'name',
       type: 'input',
@@ -53,7 +62,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
       this.uiTypes = data;
     });
     this.objectKeysRepo.store.objectKeysAll$.subscribe((data) => {
-      this.objectKeys = data;
+      // this.objectKeys = data;
       const fields = data.map((field: ObjectKey) => {
         const uiType = this.uiTypes.find((meta) => meta.id === field.uiTypeId);
         return {

@@ -1,0 +1,107 @@
+<ng-template #tableHeader>  
+  <button nz-button (click)="addNewRow()" nzType="primary" [disabled]="editId!=0">  
+    <span nz-icon nzType="plus"></span> UI Types
+  </button>
+</ng-template>
+<nz-table
+  [nzTitle]="tableHeader"
+  nzSize="small"
+  nzTableLayout="fixed"
+  [nzPageSize]="5"
+  #uiTypesTable
+  [nzLoading]="store.isLoadingState$ | async"
+  [nzData]="uiTypes"
+>
+  <thead>
+    <tr>
+      <th nzLeft>Type</th>
+      <th>Description</th>
+      <th>Pattern</th>
+      <th nzRight>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for(data of uiTypesTable.data; track $index){
+    <tr>
+      @if(editId !== data.id){
+      <td nzLeft>{{ data.name }}</td>
+      <td>{{ data.description }}</td>
+      <td>{{ data.pattern }}</td>
+      <td nzRight>
+        @if(editId==0){
+        <nz-button-group>
+          <button
+            nz-button
+            type="button"
+            (nzOnConfirm)="onRemoveConfrim(data.id)"
+            [nzBeforeConfirm]="beforeRemoveConfirm"
+            (nzOnCancel)="resetEdit()"
+            nz-popconfirm
+            nzPopconfirmTitle="Sure to Delete?"
+          >
+            <span nz-icon nzType="delete"></span>
+          </button>
+          <button nz-button type="button" (click)="startEdit(data)">
+            <span nz-icon nzType="edit"></span>
+          </button>
+        </nz-button-group>
+        }
+      </td>
+      } @else {
+      <td><input type="text" nz-input [(ngModel)]="activeUiType.name" /></td>
+      <td>
+        <input type="text" nz-input [(ngModel)]="activeUiType.description" />
+      </td>
+      <td><input type="text" nz-input [(ngModel)]="activeUiType.pattern" /></td>
+      <td>
+        <nz-button-group>
+          <button nz-button type="button" (click)="saveEdit()">
+            <span nz-icon nzType="save"></span>
+          </button>
+          <button
+            nz-button
+            type="button"
+            nz-popconfirm
+            nzPopconfirmTitle="Sure to cancel?"
+            (nzOnConfirm)="resetEdit()"
+          >
+            <span nz-icon nzType="close"></span>
+          </button>
+        </nz-button-group>
+      </td>
+      }
+    </tr>
+    }
+  </tbody>
+</nz-table>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="{{editId > 0 ? 'Edit': 'Add'}} Ui Type"
+  (nzOnCancel)="resetEdit()"
+>
+  <div *nzModalContent>
+    <form [formGroup]="form" (ngSubmit)="onSubmit(activeUiType)">
+      <formly-form
+        [form]="form"
+        [fields]="fields"
+        [model]="activeUiType"
+      ></formly-form>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <nz-button-group>
+      <button nz-button nzType="default" (click)="resetEdit()">Cancel</button>
+      <button
+        nz-button
+        nzType="primary"
+        type="button"
+        (click)="onSubmit(activeUiType)"
+        [disabled]="form.invalid"
+        [nzLoading]="isConfirmLoading"
+      >
+        <span nz-icon nzType="save"></span>Submit
+      </button>
+    </nz-button-group>
+  </div>
+</nz-modal>

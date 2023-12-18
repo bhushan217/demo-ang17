@@ -1,7 +1,7 @@
 export interface UiType {
   id: number;
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
   pattern?: string;
 }
 export type UiTypeRequiredProps = Pick<UiType, 'name' | 'description' | 'pattern'>;

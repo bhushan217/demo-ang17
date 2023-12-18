@@ -11,7 +11,7 @@ const HEADER = {
 @Injectable({
   providedIn: 'root',
 })
-export class UiTypesService {
+export class UiTypesApiService {
   constructor(private http: HttpClient) {}
 
   fetchAll() {

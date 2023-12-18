@@ -15,23 +15,24 @@ export const initialState: State = {
   error: null,
   objectKeys: createEntityState(),
 };
+export const featureKey = 'objectKeys';
 
 @Injectable({ providedIn: 'root' })
 export class ObjectKeyStateService {
   store = adapt(initialState, {
     adapter,
     sources: () => {
-      const objectKeysService = inject(ObjectKeysService);
+      const service = inject(ObjectKeysService);
 
       // https://state-adapt.github.io/docs/rxjs#getrequestsources
       const objectKeysRequestSources = getRequestSources(
-        'objectKeys',
-        objectKeysService.fetchAll()
+        featureKey,
+        service.fetchAll([],[])
       );
 
       const objectKeyCreated$ = ObjectKeysPageActions.saveObjectKey$.pipe(
         filter(({ payload }) => !('id' in payload)),
-        concatMap(({ payload }) => objectKeysService.create(payload)),
+        concatMap(({ payload }) => service.create(payload)),
         // https://state-adapt.github.io/docs/rxjs#tosource
         toSource('objectKeyCreated$')
       );
@@ -40,7 +41,7 @@ export class ObjectKeyStateService {
         filter(ObjectKeysPageActions.isObjectKeyAction),
         concatMap(
           ({ payload }) =>
-            objectKeysService
+            service
               .update(payload.id, payload)
               .pipe(map((objectKey) => getAction('objectKeyUpdated$', [objectKey.id, objectKey]))) // https://state-adapt.github.io/docs/core#getaction
         )
@@ -48,7 +49,7 @@ export class ObjectKeyStateService {
 
       const objectKeyDeleted$ = ObjectKeysPageActions.deleteObjectKey$.pipe(
         concatMap(({ payload }) =>
-          objectKeysService
+          service
             .delete(payload)
             // https://state-adapt.github.io/docs/core#getaction
             .pipe(map(() => getAction('objectKeyDeleted$', payload)))
@@ -57,12 +58,13 @@ export class ObjectKeyStateService {
 
       return {
         receiveObjectKeys: objectKeysRequestSources.success$,
+        // isLoading: objectKeysRequestSources.loding$,
         receiveError: objectKeysRequestSources.error$,
         addObjectKey: objectKeyCreated$,
         updateObjectKey: objectKeyUpdated$ as Source<[number, ObjectKey]>, // https://state-adapt.github.io/docs/rxjs#source
         removeObjectKeysOne: objectKeyDeleted$,
       };
     },
-    path: 'objectKeys',
+    path: featureKey,
   });
 }

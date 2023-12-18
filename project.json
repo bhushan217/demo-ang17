@@ -33,7 +33,17 @@
           }
         ],
         "styles": [
-          "src/styles.sass"
+          "src/styles.sass",
+          {
+            "input": "src/styles/default.less",
+            "bundleName": "default",
+            "inject": false
+          },
+          {
+            "input": "src/styles/dark.less",
+            "bundleName": "dark",
+            "inject": false
+          }
         ],
         "scripts": []
       },

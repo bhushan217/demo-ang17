@@ -23,7 +23,7 @@ const activeUiTypeIdAdapter = createAdapter<number | null>()({
 });
 
 // https://state-adapt.github.io/docs/core#joinadapters
-export const adapter = joinAdapters<State>()({
+export const uiTypeUxadapter = joinAdapters<State>()({
   activeUiTypeId: activeUiTypeIdAdapter,
   isLoading: booleanAdapter,
   error: errorAdapter,
@@ -51,5 +51,9 @@ export const adapter = joinAdapters<State>()({
   updateUiType: {
     activeUiTypeId: activeUiTypeIdAdapter.setNull,
     uiTypes: uiTypesAdapter.updateOne,
+  },
+  removeUiType: {
+    activeUiTypeId: activeUiTypeIdAdapter.setNull,
+    uiTypes: uiTypesAdapter.removeOne,
   },
 })();

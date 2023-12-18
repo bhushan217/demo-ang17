@@ -1,27 +1,5 @@
-<h4>UI Types</h4>
-@if (uiTypes.length > 0){
-<ul>
-  @for (item of uiTypes ; track item.id) {
-  <li>
-    <b>{{ item.id }}</b
-    >: {{ item.name }}, {{ item.description }}
-  </li>
-  }@empty { No data }
-</ul>
 
-}
-<hr />
-<h4>Object Types</h4>
-<ul>
-  @for (item of objectKeys; track item.id) {
-  <li>
-    <b>{{ item.id }}</b
-    >: {{ item.keyName }}, {{ item.label }}, {{ item.description }}, [{{
-      item.uiTypeId
-    }}]
-  </li>
-  }@empty { No data }
-</ul>
+
 
 <hr />
 <h4>Sample Form</h4>
@@ -42,3 +20,4 @@
   >Please fill required inputs and Submit</small
 >
 }
+{{ model | json }}
