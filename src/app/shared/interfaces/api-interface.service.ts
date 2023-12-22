@@ -1,5 +1,4 @@
-import { HttpClient } from "@angular/common/http";
-import { Page } from "@app/pages/object-key/store/object-key.model";
+import { Page } from "app/pages/object-key/store/object-key.model";
 import { Observable } from "rxjs";
 
 export interface IApiService<T, E> {
@@ -10,3 +9,4 @@ export interface IApiService<T, E> {
   updateOne(id: number, updates: E): Observable<T>;
   removeOne(id: number): Observable<any>;
 }
+export interface IKeyVal{ value: number; label:string}

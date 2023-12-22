@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ObjectKeyComponent } from './object-key.component';
+import { defaultStoreProvider } from '@state-adapt/angular';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ObjectKeyComponent', () => {
   let component: ObjectKeyComponent;
@@ -7,7 +9,8 @@ describe('ObjectKeyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ ObjectKeyComponent ]
+      imports: [ ObjectKeyComponent, HttpClientTestingModule ],
+      providers: [defaultStoreProvider],
     })
     .compileComponents();
 

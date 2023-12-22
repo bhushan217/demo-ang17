@@ -49,7 +49,6 @@
       },
       "configurations": {
         "production": {
-          "generateLockfile": true,
           "budgets": [
             {
               "type": "initial",

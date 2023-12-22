@@ -1,12 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@environment/environment';
+import { environment } from 'environment/environment';
 import { ObjectKey, ObjectKeyRequiredProps, Page } from './object-key.model';
 import { map } from 'rxjs/operators';
-import { IApiService } from '@app/shared/interfaces/api-interface.service';
-import { Observable } from 'rxjs';
 
-const BASE_URL = `${environment.apiUrl}/api/objectKeys/list`;
+const BASE_URL = `${environment.apiUrl}/api/objectKeys`;
 const HEADER = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
 };
@@ -16,7 +14,7 @@ const HEADER = {
 })
 export class ObjectKeysService {
   fetchAll(filters: string[], sorters: string[]) {
-    return this.http.get<Page<ObjectKey>>(BASE_URL).pipe(map((data: Page<ObjectKey>)=> data.content));
+    return this.http.get<Page<ObjectKey>>(`${BASE_URL}/list`).pipe(map((data: Page<ObjectKey>)=> data.content));
   }
 
   load(id: number) {

@@ -12,6 +12,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { Observable } from 'rxjs';
 import { UiType } from './store/ui-type.model';
 import { UiTypeStateService } from './store/ui-type.state-service';
@@ -34,6 +35,7 @@ import { UiTypesPageActions } from './store/ui-type-page.actions';
     NzIconModule,
     NzTableModule,
     NzPopconfirmModule,
+    NzEmptyModule,
   ],
   templateUrl: './ui-type.component.html',
   styleUrl: './ui-type.component.css',
@@ -50,15 +52,14 @@ export class UiTypeComponent {
   saveOne$ = UiTypesPageActions.saveUiType$;
   isLoading$ = this.store.isLoading$;
   error$ = this.store.error$;
+  count$ = this.store.uiTypesCount$;
+  uiTypesAll$ = this.store.uiTypesAll$;
 
   constructor(
     private nzMessageService: NzMessageService
   ) {}
 
   ngOnInit(): void {
-    this.store.uiTypesAll$.subscribe((data) => {
-      this.uiTypes = data;
-    });
   }
 
   beforeConfirm(): Observable<boolean> {
@@ -98,7 +99,7 @@ export class UiTypeComponent {
   counter = 0;
   addNewRow(): void {
     this.resetEdit();
-    this.editId = -(++this.counter);
+    this.editId = 0;
     this.isVisible = true;
   }
 
@@ -129,7 +130,9 @@ export class UiTypeComponent {
   onSubmit(answers: UiType) {
     console.log({ answers });
     this.nzMessageService.info('clicked Save');
-    this.store.addUiTypesOne(answers);
+    // this.store.addUiType(answers);
+    this.saveOne$.next({...this.activeUiType})
+    // this.created$
     this.resetEdit();
   }
 }

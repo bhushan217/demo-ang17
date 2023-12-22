@@ -1,11 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@environment/environment';
+import { environment } from 'environment/environment';
 import { UiType, UiTypeRequiredProps } from './ui-type.model';
+import { Page } from 'app/pages/object-key/store/object-key.model';
+import { map } from 'rxjs';
 
 const BASE_URL = `${environment.apiUrl}/api/uiTypes`;
 const HEADER = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Accept': 'application/json' }),
 };
 
 @Injectable({
@@ -15,7 +17,7 @@ export class UiTypesApiService {
   constructor(private http: HttpClient) {}
 
   fetchAll() {
-    return this.http.get<UiType[]>(BASE_URL);
+    return this.http.get<Page<UiType>>(`${BASE_URL}/list`).pipe(map((data: Page<UiType>) => data.content));
   }
 
   load(id: string) {

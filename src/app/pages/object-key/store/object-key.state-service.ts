@@ -31,7 +31,7 @@ export class ObjectKeyStateService {
       );
 
       const objectKeyCreated$ = ObjectKeysPageActions.saveObjectKey$.pipe(
-        filter(({ payload }) => !('id' in payload)),
+        filter(({ payload }) => (  (<ObjectKey>payload).id=== 0)),
         concatMap(({ payload }) => service.create(payload)),
         // https://state-adapt.github.io/docs/rxjs#tosource
         toSource('objectKeyCreated$')
@@ -39,6 +39,7 @@ export class ObjectKeyStateService {
 
       const objectKeyUpdated$ = ObjectKeysPageActions.saveObjectKey$.pipe(
         filter(ObjectKeysPageActions.isObjectKeyAction),
+        filter(({ payload }) => (  (<ObjectKey>payload).id > 0)) ,
         concatMap(
           ({ payload }) =>
             service
@@ -58,7 +59,6 @@ export class ObjectKeyStateService {
 
       return {
         receiveObjectKeys: objectKeysRequestSources.success$,
-        // isLoading: objectKeysRequestSources.loding$,
         receiveError: objectKeysRequestSources.error$,
         addObjectKey: objectKeyCreated$,
         updateObjectKey: objectKeyUpdated$ as Source<[number, ObjectKey]>, // https://state-adapt.github.io/docs/rxjs#source

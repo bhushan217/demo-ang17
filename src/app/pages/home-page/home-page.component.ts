@@ -1,8 +1,8 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { UiTypeStateService } from '../ui-type/store/ui-type.state-service';
 import { ObjectKeyStateService } from '../object-key/store/object-key.state-service';
-import { UiType } from '@app/pages/ui-type/store/ui-type.model';
-import { ObjectKey } from '@app/pages/object-key/store/object-key.model';
+import { UiType } from 'app/pages/ui-type/store/ui-type.model';
+import { ObjectKey } from 'app/pages/object-key/store/object-key.model';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   FormlyFieldConfig,
@@ -17,13 +17,15 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Observable } from 'rxjs';
 
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [FormlyModule, CommonModule, FormsModule, ReactiveFormsModule, NzFormModule, NzButtonModule, NzIconModule, NzTableModule, NzPopconfirmModule],
+  imports: [
+     CommonModule, FormsModule, ReactiveFormsModule, FormlyModule,
+     NzFormModule, NzButtonModule, NzIconModule, NzTableModule, NzPopconfirmModule,
+    ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.sass',
 })

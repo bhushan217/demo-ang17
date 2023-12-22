@@ -4,6 +4,7 @@ export interface ObjectKey {
   label: string | null;
   description: string | null;
   uiTypeId: number | null;
+  uiTypeName?: string
 }
 export type ObjectKeyRequiredProps = Pick<ObjectKey, 'keyName' | 'label' | 'description' | 'uiTypeId'>;
 export function isObjectKey(obj: any): obj is ObjectKey {

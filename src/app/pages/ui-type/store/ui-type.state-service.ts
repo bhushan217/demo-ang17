@@ -30,7 +30,7 @@ export class UiTypeStateService {
       );
 
       const uiTypeCreated$ = UiTypesPageActions.saveUiType$.pipe(
-        filter(({ payload }) => !('id' in payload)),
+        filter(({ payload }) => (  (<UiType>payload).id=== 0)) ,
         concatMap(({ payload }) => uiTypesService.create(payload)),
         // https://state-adapt.github.io/docs/rxjs#tosource
         toSource('uiTypeCreated$')
@@ -38,6 +38,7 @@ export class UiTypeStateService {
 
       const uiTypeUpdated$ = UiTypesPageActions.saveUiType$.pipe(
         filter(UiTypesPageActions.isUiTypeAction),
+        filter(({ payload }) => (  (<UiType>payload).id > 0)) ,
         concatMap(
           ({ payload }) =>
             uiTypesService

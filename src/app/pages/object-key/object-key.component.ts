@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject, computed, Signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -12,8 +12,11 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { ObjectKeyStateService } from './store/object-key.state-service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ObjectKey } from './store/object-key.model';
-import { Observable } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { ObjectKeysPageActions } from './store/object-key-page.actions';
+import { UiTypeStateService } from '../ui-type/store/ui-type.state-service';
+import { UiType } from '../ui-type/store/ui-type.model';
+import { IKeyVal } from 'app/shared/interfaces/api-interface.service';
 
 @Component({
   selector: 'app-object-key',
@@ -30,20 +33,27 @@ import { ObjectKeysPageActions } from './store/object-key-page.actions';
     NzPopconfirmModule,
     NzModalModule
   ],
+  providers:[UiTypeStateService, ObjectKeyStateService],
   templateUrl: './object-key.component.html',
   styleUrl: './object-key.component.css',
 })
 export class ObjectKeyComponent implements OnInit {
+  uiTypeStore = inject(UiTypeStateService).store;
+  store = inject(ObjectKeyStateService).store;
+  removeOne$ = ObjectKeysPageActions.deleteObjectKey$;
+  saveOne$ = ObjectKeysPageActions.saveObjectKey$;
+  isLoading$ = this.store.isLoading$;
+  error$ = this.store.error$;
   isConfirmLoading = false;
   editId: number = 0;
   initObjectKey: ObjectKey = {id: this.editId, keyName: null, label: null, description: null, uiTypeId: null};
   activeObjectKey: ObjectKey = {...this.initObjectKey};
+  uiTypesAllKeyVals$: Observable<IKeyVal[]> = this.uiTypeStore.uiTypesAll$.pipe( map((uiTypes:UiType[]) => uiTypes.map((ui:UiType) => ({label:ui.description, value: ui.id} as IKeyVal))));
 
   constructor(
-    private objectKeysRepo: ObjectKeyStateService,
+    // private objectKeysRepo: ObjectKeyStateService,
     private nzMessageService: NzMessageService
   ) {
-    // this.activeObjectKeyId$ = this.objectKeysRepo.store.activeObjectKeyId$
   }
 
   // readonly searchCriteria = signal('');
@@ -51,7 +61,12 @@ export class ObjectKeyComponent implements OnInit {
   //   filter((criteria) => criteria.length > 4),
   //   switchMap((criteria) => this.objectKeysRepo.store.objectKeysAll$({}))
   // );
-  readonly objectKeyList$ = toSignal(this.objectKeysRepo.store.objectKeysAll$, { 
+  readonly uiTypeKVs$ = toSignal(this.uiTypesAllKeyVals$, { 
+    initialValue: [] as IKeyVal[] 
+  });
+  readonly getLabelByUiTypeId = (id: number, kVs: Signal<IKeyVal[]>) => { return (kVs().find((ui:IKeyVal) => ui.value === id)?.label ?? '')};
+  readonly objectKeyList$ = toSignal(this.store.objectKeysAll$
+    .pipe(map((ok: ObjectKey[])=> ok.map(o => ({...o, uiTypeName: this.getLabelByUiTypeId(o.uiTypeId||0, this.uiTypeKVs$)}as ObjectKey)))), { 
     initialValue: [] as ObjectKey[] 
   });
 
@@ -79,7 +94,7 @@ export class ObjectKeyComponent implements OnInit {
   }
 
   saveEdit(): void {
-    this.objectKeysRepo.store.updateObjectKey([this.editId, {...this.activeObjectKey}])
+    this.store.updateObjectKey([this.editId, {...this.activeObjectKey}])
   }
   
   beforeRemoveConfirm(): Observable<boolean> {
@@ -99,7 +114,7 @@ export class ObjectKeyComponent implements OnInit {
 
   onRemoveConfrim(id: number) {
     console.debug({id})
-    this.objectKeysRepo.store.removeObjectKeysOne(id)
+    this.removeOne$.next(id);
     this.nzMessageService.info('clicked Delete');
   }
   resetEdit() {
@@ -115,14 +130,17 @@ export class ObjectKeyComponent implements OnInit {
     {key: 'keyName', type: 'input', props: { label: 'Name', required: true}},
     {key: 'label', type: 'input', props: { label: 'Label', required: true}},
     {key: 'description', type: 'textarea', props: { label: 'Description', required: true}},
+    {key: 'uiTypeId', type: 'select', props: { label: 'UI Type', required: true, options: this.uiTypesAllKeyVals$}},
   ];
 
   isVisible = false;
   onSubmit(answers: ObjectKey){
     console.log({answers});
     this.nzMessageService.info('clicked Save');
-    this.objectKeysRepo.store.addObjectKey(answers);
+    this.saveOne$.next({...this.activeObjectKey})
     this.resetEdit();
   }
 
 }
+
+

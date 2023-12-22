@@ -6,5 +6,5 @@ export interface UiType {
 }
 export type UiTypeRequiredProps = Pick<UiType, 'name' | 'description' | 'pattern'>;
 export function isUiType(obj: any): obj is UiType {
-  return obj && obj.id && obj.keyName;
+  return obj && obj.id && obj.name;
 }

@@ -1,10 +1,19 @@
+<div class="error">
+  @if( error$ | async; as errors){
+  <!-- @for(let error of errors; trackBy $index ){ -->
+    <li> {{errors}}</li>
+  <!-- } -->
+}
+</div>
 <ng-template #tableHeader>  
   <button nz-button (click)="addNewRow()" nzType="primary" [disabled]="editId!=0">  
-    <span nz-icon nzType="plus"></span> UI Types
+    <span nz-icon nzType="plus"></span> UI Types ({{count$ | async}})
   </button>
 </ng-template>
+@if (uiTypesAll$ | async; as uiTypes) {
 <nz-table
   [nzTitle]="tableHeader"
+  [nzLoading]="isLoading$ | async"
   nzSize="small"
   nzTableLayout="fixed"
   [nzPageSize]="5"
@@ -47,34 +56,14 @@
         </nz-button-group>
         }
       </td>
-      } @else {
-      <td><input type="text" nz-input [(ngModel)]="activeUiType.name" /></td>
-      <td>
-        <input type="text" nz-input [(ngModel)]="activeUiType.description" />
-      </td>
-      <td><input type="text" nz-input [(ngModel)]="activeUiType.pattern" /></td>
-      <td>
-        <nz-button-group>
-          <button nz-button type="button" (click)="saveEdit()">
-            <span nz-icon nzType="save"></span>
-          </button>
-          <button
-            nz-button
-            type="button"
-            nz-popconfirm
-            nzPopconfirmTitle="Sure to cancel?"
-            (nzOnConfirm)="resetEdit()"
-          >
-            <span nz-icon nzType="close"></span>
-          </button>
-        </nz-button-group>
-      </td>
       }
     </tr>
     }
   </tbody>
 </nz-table>
-
+}@else {
+  <nz-empty nzNotFoundImage="simple"></nz-empty>
+}
 <nz-modal
   [(nzVisible)]="isVisible"
   nzTitle="{{editId > 0 ? 'Edit': 'Add'}} Ui Type"

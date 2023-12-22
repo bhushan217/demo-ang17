@@ -1,3 +1,4 @@
+
 <ng-template #tableHeader>  
   <button nz-button (click)="addNewRow()" nzType="primary" [disabled]="editId!=0">  
     <span nz-icon nzType="plus"></span> Object Key
@@ -28,7 +29,7 @@
       <td>{{ data.keyName }}</td>
       <td>{{ data.label }}</td>
       <td>{{ data.description }}</td>
-      <td>{{ data.uiTypeId }}</td>
+      <td>{{ data.uiTypeName }}</td>
       <td nzRight>
         <nz-button-group>
           <button

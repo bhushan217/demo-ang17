@@ -1,10 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { RouterTestingModule } from "@angular/router/testing";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      imports: [AppComponent, RouterTestingModule, BrowserAnimationsModule],
     }).compileComponents();
   });
 
@@ -24,6 +27,6 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, demo-ang17');
+    expect(compiled.querySelector('.ant-menu-title-content')?.textContent).toContain('Hello, demo-ang17');
   });
 });
