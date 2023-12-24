@@ -1,7 +1,7 @@
 <div class="error">
   @if( error$ | async; as errors){
   <!-- @for(let error of errors; trackBy $index ){ -->
-    <li> {{errors}}</li>
+    <li> {{errors | json}}</li>
   <!-- } -->
 }
 </div>

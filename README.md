@@ -25,3 +25,10 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## dockerBuild
+
+Run `docker build -t bhushan217/demo-ang17:v1.0.0 -f ./Dockerfile .` 
+Run `docker run -p 8000:80 -d bhushan217/demo-ang17:v1.0.0 --net=ruk-bal-nw ` 
+
+
