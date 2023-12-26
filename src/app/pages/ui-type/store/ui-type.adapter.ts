@@ -9,14 +9,14 @@ import {
 export interface State {
   activeUiTypeId: number | null;
   isLoading: boolean;
-  error: object | null;
+  error: any | null;
   uiTypes: EntityState<UiType>; // https://github.com/state-adapt/state-adapt/blob/main/libs/core/adapters/src/lib/create-entity-adapter.function.ts#LL17C1-L23C2
 }
 
 const uiTypeAdapter = joinAdapters<UiType, keyof UiType>()({})(); // https://state-adapt.github.io/docs/core#joinadapters
 const uiTypesAdapter = createEntityAdapter<UiType>()(uiTypeAdapter); // https://state-adapt.github.io/adapters/core#createEntityAdapter
 
-const errorAdapter = createAdapter<object | null>()({}); // https://state-adapt.github.io/docs/core#createadapter
+const errorAdapter = createAdapter<any | null>()({}); // https://state-adapt.github.io/docs/core#createadapter
 // https://state-adapt.github.io/docs/core#createadapter
 const activeUiTypeIdAdapter = createAdapter<number | null>()({
   setNull: () => null,

@@ -5,12 +5,13 @@ import { ObjectKeysService } from './object-key.service';
 import { adapt } from '@state-adapt/angular';
 import { getAction } from '@state-adapt/core';
 import { createEntityState } from '@state-adapt/core/adapters';
-import { Source, getRequestSources, toSource } from '@state-adapt/rxjs';
+import { Source, getRequestSources, splitSources, toSource } from '@state-adapt/rxjs';
 import { concatMap, filter, map } from 'rxjs/operators';
 import { State, adapter } from './object-key.adapter';
 
 export const initialState: State = {
   activeObjectKeyId: null,
+  // search: [],
   isLoading: true,
   error: null,
   objectKeys: createEntityState(),
@@ -23,15 +24,14 @@ export class ObjectKeyStateService {
     adapter,
     sources: () => {
       const service = inject(ObjectKeysService);
+      // const { success$, error$ } = getRequestSources(featureKey+'Page', service.fetchAll([],[]) );
+      // const {} = splitSources(objectKeysRequestPageSources, {})
 
       // https://state-adapt.github.io/docs/rxjs#getrequestsources
-      const objectKeysRequestSources = getRequestSources(
-        featureKey,
-        service.fetchAll([],[])
-      );
+      const objectKeysRequestSources = getRequestSources(featureKey, service.fetchAll([],[]) );
 
       const objectKeyCreated$ = ObjectKeysPageActions.saveObjectKey$.pipe(
-        filter(({ payload }) => (  (<ObjectKey>payload).id=== 0)),
+        filter(({ payload }) => (  (<ObjectKey>payload).id < 1)),
         concatMap(({ payload }) => service.create(payload)),
         // https://state-adapt.github.io/docs/rxjs#tosource
         toSource('objectKeyCreated$')

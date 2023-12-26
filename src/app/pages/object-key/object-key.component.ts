@@ -42,6 +42,8 @@ export class ObjectKeyComponent implements OnInit {
   store = inject(ObjectKeyStateService).store;
   removeOne$ = ObjectKeysPageActions.deleteObjectKey$;
   saveOne$ = ObjectKeysPageActions.saveObjectKey$;
+  activeObjectId$ = this.store.activeObjectKeyId$ ;
+  totalCount$ = this.store.totalCount$ ;
   isLoading$ = this.store.isLoading$;
   error$ = this.store.error$;
   isConfirmLoading = false;

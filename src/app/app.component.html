@@ -1,6 +1,8 @@
-<nz-layout>
-  <nz-header>
-    <div class="header-logo">
+
+@if(settingState | async; as setting){
+  <nz-layout>
+  <nz-header [ngClass]="bgColor">
+    <div class="header-logo"  >
       <img nz-icon [src]="'assets/svgs/angular-logo.svg'" alt="Logo" />
       <app-svg-icon path="assets/svgs/angular-logo.svg"></app-svg-icon>
     </div>
@@ -24,11 +26,12 @@
         nzCheckedChildren="🌚"
         nzUnCheckedChildren="🔆"
         (ngModelChange)="loadTheme(false)"
-      ></nz-switch>
+      ></nz-switch
+      ><b>{{ setting.themeMode }}</b>
     </div>
   </nz-header>
   <nz-layout>
-    <nz-sider nzCollapsible>
+    <nz-sider nzCollapsible  [ngClass]="bgColor">
       <ul nz-menu nzMode="inline" class="sider-menu">
         <li nz-submenu nzOpen nzIcon="user" nzTitle="Side Nav 1">
           <ul>
@@ -51,7 +54,11 @@
         <nz-breadcrumb-item>List</nz-breadcrumb-item>
         <nz-breadcrumb-item>App</nz-breadcrumb-item>
       </nz-breadcrumb> -->
-      <nz-content><router-outlet></router-outlet></nz-content>
+      <nz-content>
+        <router-outlet></router-outlet>
+      </nz-content>
     </nz-layout>
   </nz-layout>
 </nz-layout>
+
+}

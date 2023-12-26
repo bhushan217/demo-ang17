@@ -24,7 +24,7 @@ const ngZorroConfig: NzConfig = {
   message: { nzTop: 120 },
   notification: { nzTop: 240 },
   theme: {
-    primaryColor: '#c65521'
+    primaryColor: '#1778cd'
   }
 };
 registerLocaleData(en);

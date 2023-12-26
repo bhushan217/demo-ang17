@@ -1,7 +1,8 @@
 <div class="error">
-  @if( error$ | async; as errors){
+  @if( error$ | async; as errors ){
   <!-- @for(let error of errors; trackBy $index ){ -->
-    <li> {{errors | json}}</li>
+    <span><b>{{errors.name}}</b> {{errors.message}}</span>
+    <!-- {{errors|json}} -->
   <!-- } -->
 }
 </div>
@@ -12,7 +13,7 @@
 </ng-template>
 <nz-table
   [nzTitle]="tableHeader"
-  nzTitle="Object Types"
+  nzTitle="Object Types [{{totalCount$ | async}}]"
   nzSize="small"
   nzTableLayout="fixed"
   [nzPageSize]="5"
@@ -75,7 +76,7 @@
   </div>
   <div *nzModalFooter>
     <nz-button-group>
-      <button nz-button nzType="default" (click)="resetEdit()">Cancel</button>
+      <button nz-button nzType="default" (click)="resetEdit()">Cancel [{{activeObjectId$ | async}}]</button>
       <button
         nz-button
         nzType="primary"
